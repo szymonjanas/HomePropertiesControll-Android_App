@@ -2,26 +2,23 @@ package com.HomePropertiesControll;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.HomePropertiesControll.HttpRequest.HttpRequestSingleton;
 import com.HomePropertiesControll.ItemsList.Sensor;
 import com.HomePropertiesControll.ItemsList.SensorAdapter;
+import com.HomePropertiesControll.User.User;
+import com.HomePropertiesControll.User.UserModel;
 import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        User.initInstance();
+        User.getInstance().setUser(new UserModel("android", "androidpassword"));
         final Button refreshButton = findViewById(R.id.refreshButton);
 
         sensorRecycleView = findViewById(R.id.sensors_recycler_viewer);
@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
                 HttpRequestSingleton.getInstance(context).addToRequestQueue(refresh());
             }
         });
+
+
     }
 
     public JsonArrayRequest refresh(){
@@ -102,9 +104,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> params = new HashMap<String, String>();
-                String creds = String.format("%s:%s","android","androidpassword");
-                String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.DEFAULT);
-                params.put("Authorization", auth);
+                params.put("Authorization", User.getInstance().getUserAuthorization());
                 return params;
             }
         };
