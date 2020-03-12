@@ -8,14 +8,8 @@ public class User {
 
     private User(){}
 
-    private static void isInstance(){
-        if (instance == null){
-            throw new SecurityException("User Instance not setted! initInstance first!");
-        }
-    }
-
-    private static void isUser(){
-        isInstance();
+     private void isUser(){
+        initInstance();
         if (user == null){
             throw new SecurityException("UserModel not setted! setUser first!");
         }
@@ -28,7 +22,7 @@ public class User {
     }
 
     public static User getInstance(){
-        isInstance();
+        initInstance();
         return instance;
     }
 
@@ -46,7 +40,13 @@ public class User {
         String authRaw = String.format("%s:%s",
                 instance.getUser().getUsername(),
                 instance.getUser().getPassword());
-        String auth = "Basic " + Base64.encodeToString(authRaw.getBytes(), Base64.DEFAULT);
-        return auth;
+        return "Basic " + Base64.encodeToString(authRaw.getBytes(), Base64.DEFAULT);
+    }
+
+    public static String encryptUser(UserModel user){
+        String authRaw = String.format("%s:%s",
+                user.getUsername(),
+                user.getPassword());
+        return "Basic " + Base64.encodeToString(authRaw.getBytes(), Base64.DEFAULT);
     }
 }
