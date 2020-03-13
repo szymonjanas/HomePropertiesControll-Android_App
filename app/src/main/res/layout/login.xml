@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:hint="Username"
+            android:hint="@string/username"
             android:layout_centerHorizontal="true"
             android:layout_above="@+id/password"
 
@@ -26,7 +26,7 @@
             android:inputType="textPassword"
             android:layout_centerHorizontal="true"
             android:layout_above="@+id/remember_me"
-            android:hint="Password"
+            android:hint="@string/password"
 
             />
 
@@ -37,29 +37,30 @@
             android:layout_centerHorizontal="true"
             android:layout_above="@+id/username"
             android:layout_margin="25dp"
+
             />
 
         <CheckBox
             android:id="@+id/remember_me"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Remember Me"
+            android:text="@string/remember_me"
             android:layout_alignStart="@+id/password"
             android:layout_marginTop="10dp"
             android:layout_alignBottom="@+id/loginBtn"
             android:layout_marginBottom="100dp"
+
             />
 
         <Button
             android:id="@+id/loginBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Login"
+            android:text="@string/login"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+
             />
 
-
     </RelativeLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
