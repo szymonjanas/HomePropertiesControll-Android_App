@@ -1,6 +1,7 @@
 package com.HomePropertiesControll.HttpRequest;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.HomePropertiesControll.User.User;
 import com.android.volley.AuthFailureError;
@@ -8,8 +9,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +26,9 @@ public class HttpSensorsRequests {
         this.onSensorsListResponseCallback = onSensorsListResponseCallback;
     }
 
-    public void sendRequest(final Context context){
+    public HttpSensorsRequests() {}
+
+    public void sendRequest(){
         String url ="http://10.0.2.2:8080/api/android";
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -42,6 +49,44 @@ public class HttpSensorsRequests {
                 return params;
             }
         };
-        HttpRequestSingleton.getInstance(context).addToRequestQueue(jsonArrayRequest);
+        HttpRequestSingleton.getInstance().addToRequestQueue(jsonArrayRequest);
+    }
+
+    public void sendChangeRequest(String id, String parameter, Object value) throws JSONException {
+
+        String url = "http://10.0.2.2:8080/api/android/" + parameter;
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(parameter, value);
+        jsonObject.put("id", id);
+
+        JsonObjectRequest stringRequest = new JsonObjectRequest
+                (Request.Method.PUT, url, jsonObject, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.w("REQUEST RESPONSE", response.toString());
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("REQUEST ERROR", error.toString());
+                    }
+                }) {
+
+            @Override
+            public String getBodyContentType()
+            {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", User.getInstance().getUserAuthorization());
+                params.put("Content-Type", "application/json");
+                return params;
+            };
+        };
+        HttpRequestSingleton.getInstance().addToRequestQueue(stringRequest);
     }
 }
