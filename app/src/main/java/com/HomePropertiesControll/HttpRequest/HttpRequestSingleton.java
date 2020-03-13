@@ -36,9 +36,15 @@ public class HttpRequestSingleton {
                 });
     }
 
-    public static synchronized HttpRequestSingleton getInstance(Context context) {
+    public static void initHttpRequestSingleton(Context context){
         if (instance == null) {
             instance = new HttpRequestSingleton(context);
+        }
+    }
+
+    public static synchronized HttpRequestSingleton getInstance() {
+        if (instance == null) {
+            instance = new HttpRequestSingleton(ctx);
         }
         return instance;
     }

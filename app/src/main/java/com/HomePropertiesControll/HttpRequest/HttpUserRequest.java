@@ -21,7 +21,7 @@ public class HttpUserRequest {
 
     }
 
-    public void sendRequest(final Context context, final UserModel user){
+    public void sendRequest(final UserModel user){
         String url ="http://10.0.2.2:8080/api/android/login";
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET, url,
@@ -43,6 +43,6 @@ public class HttpUserRequest {
                 return params;
             }
         };
-        HttpRequestSingleton.getInstance(context).addToRequestQueue(stringRequest);
+        HttpRequestSingleton.getInstance().addToRequestQueue(stringRequest);
     }
 }
