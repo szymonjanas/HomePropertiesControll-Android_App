@@ -20,7 +20,7 @@
         </activity>
         <activity android:name=".Sensors.SensorsListActivity"/>
         <activity android:name=".User.LoginActivity"/>
-
+        <activity android:name=".Complain.ComplainActivity"/>
     </application>
 
 </manifest>

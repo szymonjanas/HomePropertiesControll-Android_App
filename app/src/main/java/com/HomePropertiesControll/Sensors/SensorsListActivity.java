@@ -1,19 +1,25 @@
 package com.HomePropertiesControll.Sensors;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.HomePropertiesControll.Complain.ComplainActivity;
 import com.HomePropertiesControll.HttpRequest.HttpSensorsRequests;
 import com.HomePropertiesControll.HttpRequest.OnSensorsListResponseCallback;
 import com.HomePropertiesControll.ItemsList.Sensor;
 import com.HomePropertiesControll.ItemsList.SensorAdapter;
 import com.HomePropertiesControll.R;
 
+import com.HomePropertiesControll.User.User;
 import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
@@ -30,12 +36,20 @@ public class SensorsListActivity extends AppCompatActivity {
     final ArrayList<Sensor> sensorArrayList = new ArrayList<>();
     final Context context = this;
 
+    private TextView userCardUsername;
+    private TextView userCardMOTD;
+    private Button complainBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sensors_list);
 
         final SwipeRefreshLayout refresh = findViewById(R.id.sensors_refresh);
+
+        userCardUsername = findViewById(R.id.user_card_username);
+        userCardMOTD = findViewById(R.id.user_card_motd);
+        complainBtn = findViewById(R.id.complain_button);
 
         sensorRecycleView = findViewById(R.id.sensors_recycler_viewer);
         sensorRecycleView.setHasFixedSize(true);
@@ -44,6 +58,15 @@ public class SensorsListActivity extends AppCompatActivity {
         sensorRecycleView.setLayoutManager(sensorLayoutManager);
         sensorRecycleView.setAdapter(sensorAdapter);
 
+        userCardUsername.setText(User.getInstance().getUser().getUsername());
+        userCardMOTD.setText("Have a good day!");
+
+        complainBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                complain();
+            }
+        });
 
         sendRequest();
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -67,9 +90,8 @@ public class SensorsListActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
+
     private void sendRequest(){
         HttpSensorsRequests httpSensorsRequests = new HttpSensorsRequests(new OnSensorsListResponseCallback() {
             @Override
@@ -78,7 +100,6 @@ public class SensorsListActivity extends AppCompatActivity {
                 for (int i = 0; i < array.length(); i++) {
                     try {
                         JSONObject jsonobject = array.getJSONObject(i);
-
                         sensorArrayList.add(new Sensor(
                                 jsonobject.getString("id"),
                                 jsonobject.getString("name"),
@@ -108,5 +129,10 @@ public class SensorsListActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         this.onStop();
+    }
+
+    public void complain(){
+        Intent intent = new Intent(this, ComplainActivity.class);
+        startActivity(intent);
     }
 }
