@@ -22,10 +22,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class SensorsList extends AppCompatActivity {
+public class SensorsListActivity extends AppCompatActivity {
 
     private RecyclerView sensorRecycleView;
-    private RecyclerView.Adapter sensorAdapter;
+    private SensorAdapter sensorAdapter;
     private RecyclerView.LayoutManager sensorLayoutManager;
     final ArrayList<Sensor> sensorArrayList = new ArrayList<>();
     final Context context = this;
@@ -44,6 +44,7 @@ public class SensorsList extends AppCompatActivity {
         sensorRecycleView.setLayoutManager(sensorLayoutManager);
         sensorRecycleView.setAdapter(sensorAdapter);
 
+
         sendRequest();
         refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -52,6 +53,21 @@ public class SensorsList extends AppCompatActivity {
                 refresh.setRefreshing(false);
             }
         });
+
+        sensorAdapter.setOnItemClickListener(new SensorAdapter.OnItemClickListener() {
+            @Override
+            public void onSwitchClickListener(int position, boolean isChecked) {
+                Sensor sensor = sensorArrayList.get(position);
+                HttpSensorsRequests requests = new HttpSensorsRequests();
+                try {
+                    sensor.setState(isChecked);
+                    requests.sendChangeRequest(sensor.getId(), "state", isChecked);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
 
     }
     private void sendRequest(){
@@ -68,7 +84,8 @@ public class SensorsList extends AppCompatActivity {
                                 jsonobject.getString("name"),
                                 jsonobject.getString("type"),
                                 jsonobject.getString("location"),
-                                jsonobject.getInt("level")
+                                jsonobject.getInt("level"),
+                                jsonobject.getBoolean("state")
                         ));
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -84,7 +101,12 @@ public class SensorsList extends AppCompatActivity {
                 System.out.println(error.toString());
             }
         });
-        httpSensorsRequests.sendRequest(context);
+        httpSensorsRequests.sendRequest();
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.onStop();
     }
 }
