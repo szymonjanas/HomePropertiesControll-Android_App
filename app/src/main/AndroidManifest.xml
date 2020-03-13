@@ -18,7 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Sensors.SensorsList"/>
+        <activity android:name=".Sensors.SensorsListActivity"/>
+        <activity android:name=".User.LoginActivity"/>
 
     </application>
 
