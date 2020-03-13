@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.HomePropertiesControll.HttpRequest.HttpRequestSingleton;
 import com.HomePropertiesControll.HttpRequest.HttpUserRequest;
 import com.HomePropertiesControll.HttpRequest.OnUserResponseCallback;
 import com.HomePropertiesControll.R;
@@ -29,7 +28,6 @@ public class LoginActivity extends AppCompatActivity {
     final UserModel user = new UserModel();
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
-    private Boolean saveLogin;
 
     @SuppressLint("CommitPrefEdits")
     @Override
@@ -46,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         loginPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
 
-        saveLogin = loginPreferences.getBoolean("saveLogin", false);
+        Boolean saveLogin = loginPreferences.getBoolean("saveLogin", false);
         if (saveLogin.equals(true)){
             username.setText(loginPreferences.getString("username", ""));
             password.setText(loginPreferences.getString("password", ""));
@@ -119,5 +117,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }
