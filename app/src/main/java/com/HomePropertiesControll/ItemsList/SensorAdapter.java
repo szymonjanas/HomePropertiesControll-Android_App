@@ -3,9 +3,12 @@ package com.HomePropertiesControll.ItemsList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.HomePropertiesControll.R;
@@ -15,15 +18,40 @@ import java.util.ArrayList;
 public class SensorAdapter extends RecyclerView.Adapter<SensorAdapter.SensorViewHolder> {
 
     private ArrayList<Sensor> sensorArrayList;
+    private OnItemClickListener mListener;
 
-    public static class SensorViewHolder extends RecyclerView.ViewHolder {
+    public interface OnItemClickListener {
 
-        public TextView sensorName;
-        public TextView sensorLocation;
-        public SensorViewHolder(@NonNull View itemView) {
+        void onSwitchClickListener(int position, boolean isChecked);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mListener = listener;
+    }
+
+    static class SensorViewHolder extends RecyclerView.ViewHolder {
+        TextView sensorName;
+        TextView sensorLocation;
+        SwitchCompat switchState;
+        ProgressBar levelBar;
+        SensorViewHolder(@NonNull View itemView, final OnItemClickListener listener, final ArrayList<Sensor> sensorsList) {
             super(itemView);
             sensorName = itemView.findViewById(R.id.sensor_name);
             sensorLocation = itemView.findViewById(R.id.sensor_location);
+            switchState = itemView.findViewById(R.id.switch_state);
+            levelBar = itemView.findViewById(R.id.level_bar);
+
+            switchState.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (listener != null){
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            listener.onSwitchClickListener(position, isChecked);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -35,7 +63,7 @@ public class SensorAdapter extends RecyclerView.Adapter<SensorAdapter.SensorView
     @Override
     public SensorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.sensor_item, parent, false);
-        return new SensorViewHolder(v);
+        return new SensorViewHolder(v, mListener, sensorArrayList);
     }
 
     @Override
@@ -43,6 +71,8 @@ public class SensorAdapter extends RecyclerView.Adapter<SensorAdapter.SensorView
         Sensor currentItem = sensorArrayList.get(position);
         holder.sensorName.setText(currentItem.getName());
         holder.sensorLocation.setText(currentItem.getLocation());
+        holder.switchState.setChecked(currentItem.getState());
+        holder.levelBar.setProgress(currentItem.getLevel());
     }
 
     @Override
