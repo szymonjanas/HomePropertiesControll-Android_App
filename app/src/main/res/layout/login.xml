@@ -25,7 +25,7 @@
             android:ems="10"
             android:inputType="textPassword"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_above="@+id/remember_me"
             android:hint="Password"
 
             />
@@ -39,14 +39,24 @@
             android:layout_margin="25dp"
             />
 
+        <CheckBox
+            android:id="@+id/remember_me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remember Me"
+            android:layout_alignStart="@+id/password"
+            android:layout_marginTop="10dp"
+            android:layout_alignBottom="@+id/loginBtn"
+            android:layout_marginBottom="100dp"
+            />
+
         <Button
             android:id="@+id/loginBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Login"
-            android:layout_below="@+id/password"
             android:layout_centerHorizontal="true"
-            android:layout_margin="50dp"
+            android:layout_centerVertical="true"
             />
 
 
