@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">HomePropertiesControll</string>
-    <string name="remember_me">remember me</string>
+    <string name="remember_me">Remember me</string>
     <string name="username">username</string>
     <string name="password">password</string>
     <string name="login">log in</string>
+    <string name="motd">Message of the day!</string>
 </resources>
