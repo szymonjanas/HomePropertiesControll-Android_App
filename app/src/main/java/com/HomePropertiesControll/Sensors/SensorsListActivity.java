@@ -59,7 +59,7 @@ public class SensorsListActivity extends AppCompatActivity {
         sensorRecycleView.setAdapter(sensorAdapter);
 
         userCardUsername.setText(User.getInstance().getUser().getUsername());
-        userCardMOTD.setText("Have a good day!");
+        userCardMOTD.setText(R.string.motd_default);
 
         complainBtn.setOnClickListener(new View.OnClickListener() {
             @Override
