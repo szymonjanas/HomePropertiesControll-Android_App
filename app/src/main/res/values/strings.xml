@@ -9,4 +9,10 @@
     <string name="complain_write_area_info">Please write here your opinion....</string>
     <string name="complain_submit">send</string>
     <string name="complain_type">What is the opinion about?</string>
+
+    <string name="server_error">Server Error!</string>
+
+
+
+
 </resources>
