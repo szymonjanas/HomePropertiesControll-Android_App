@@ -1,6 +1,5 @@
 package com.HomePropertiesControll.HttpRequest;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.HomePropertiesControll.User.User;
@@ -10,7 +9,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +27,7 @@ public class HttpSensorsRequests {
     public HttpSensorsRequests() {}
 
     public void sendRequest(){
-        String url ="http://10.0.2.2:8080/api/android";
+        String url = HttpConfig.get_url_prod_server() + "android/";
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
@@ -53,8 +51,7 @@ public class HttpSensorsRequests {
     }
 
     public void sendChangeRequest(String id, String parameter, Object value) throws JSONException {
-
-        String url = "http://10.0.2.2:8080/api/android/" + parameter;
+        String url = HttpConfig.get_url_prod_server() + "android/" + parameter;
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(parameter, value);

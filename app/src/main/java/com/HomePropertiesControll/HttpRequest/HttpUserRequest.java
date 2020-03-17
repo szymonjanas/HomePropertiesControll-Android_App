@@ -1,7 +1,5 @@
 package com.HomePropertiesControll.HttpRequest;
 
-import android.content.Context;
-
 import com.HomePropertiesControll.User.User;
 import com.HomePropertiesControll.User.UserModel;
 import com.android.volley.AuthFailureError;
@@ -22,7 +20,7 @@ public class HttpUserRequest {
     }
 
     public void sendRequest(final UserModel user){
-        String url ="http://10.0.2.2:8080/api/android/login";
+        String url = HttpConfig.get_url_prod_server() + "android/login";
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET, url,
             new Response.Listener<String>(){
