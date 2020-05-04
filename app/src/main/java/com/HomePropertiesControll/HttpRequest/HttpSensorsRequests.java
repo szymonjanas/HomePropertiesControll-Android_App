@@ -4,8 +4,10 @@ import android.util.Log;
 
 import com.HomePropertiesControll.User.User;
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -28,7 +30,7 @@ public class HttpSensorsRequests {
 
     public void sendRequest(){
         String url = HttpConfig.get_url_prod_server() + "android/";
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -47,6 +49,10 @@ public class HttpSensorsRequests {
                 return params;
             }
         };
+        jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
+                3000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         HttpRequestSingleton.getInstance().addToRequestQueue(jsonArrayRequest);
     }
 

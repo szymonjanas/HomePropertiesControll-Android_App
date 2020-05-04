@@ -11,6 +11,7 @@
     <string name="complain_type">What is the opinion about?</string>
 
     <string name="server_error">Server Error!</string>
+    <string name="server_error_nice">Server Error!\nPlease try again later!</string>
 
     <string name="motd_default">Have a nice day!</string>
 

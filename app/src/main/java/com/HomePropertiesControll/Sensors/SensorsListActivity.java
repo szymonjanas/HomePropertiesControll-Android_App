@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ import com.android.volley.VolleyError;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -35,10 +37,12 @@ public class SensorsListActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager sensorLayoutManager;
     final ArrayList<Sensor> sensorArrayList = new ArrayList<>();
     final Context context = this;
+    private ProgressBar loadSensorListBar;
 
     private TextView userCardUsername;
     private TextView userCardMOTD;
     private Button complainBtn;
+    private TextView errorLoadSensorList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,8 @@ public class SensorsListActivity extends AppCompatActivity {
         userCardUsername = findViewById(R.id.user_card_username);
         userCardMOTD = findViewById(R.id.user_card_motd);
         complainBtn = findViewById(R.id.complain_button);
+        loadSensorListBar = findViewById(R.id.load_sensors_list_bar);
+        errorLoadSensorList = findViewById(R.id.error_load_sensors_list);
 
         sensorRecycleView = findViewById(R.id.sensors_recycler_viewer);
         sensorRecycleView.setHasFixedSize(true);
@@ -93,9 +99,14 @@ public class SensorsListActivity extends AppCompatActivity {
     }
 
     private void sendRequest(){
+        errorLoadSensorList.setVisibility(View.INVISIBLE);
+        sensorRecycleView.setVisibility(View.INVISIBLE);
+        loadSensorListBar.setVisibility(View.VISIBLE);
         HttpSensorsRequests httpSensorsRequests = new HttpSensorsRequests(new OnSensorsListResponseCallback() {
             @Override
             public void onResponse(JSONArray array) {
+                loadSensorListBar.setVisibility(View.INVISIBLE);
+                sensorRecycleView.setVisibility(View.VISIBLE);
                 sensorArrayList.clear();
                 for (int i = 0; i < array.length(); i++) {
                     try {
@@ -109,6 +120,9 @@ public class SensorsListActivity extends AppCompatActivity {
                                 jsonobject.getBoolean("state")
                         ));
                     } catch (JSONException e) {
+                        errorLoadSensorList.setVisibility(View.VISIBLE);
+                        loadSensorListBar.setVisibility(View.INVISIBLE);
+                        errorLoadSensorList.setText(R.string.server_error_nice);
                         e.printStackTrace();
                     }
                     sensorAdapter.notifyDataSetChanged();
@@ -119,6 +133,9 @@ public class SensorsListActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 sensorArrayList.clear();
                 sensorAdapter.notifyDataSetChanged();
+                errorLoadSensorList.setVisibility(View.VISIBLE);
+                loadSensorListBar.setVisibility(View.INVISIBLE);
+                errorLoadSensorList.setText(R.string.server_error_nice);
                 System.out.println(error.toString());
             }
         });
